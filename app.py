@@ -54,26 +54,18 @@ def add_tarefa_text(texto, id, linhaAtual, frm):
 
 
 def concluir_tarefa(tarefa_id, linhaAtual):
-    print(linhaAtual)
-    for widget in root.grid_slaves():
-        print(widget.grid_info())
-        if int(widget.grid_info()["row"]) == linhaAtual:
-            widget.grid_remove()
     db.concluir_tarefa(tarefa_id)
-
-
 
 
 def exibir_concluidas():
     modal = tk.Toplevel(root)
-    modal.geometry("200x200+100+100")
     table = ttk.Treeview(modal)
     table["columns"] = ("tarefa")
     table.heading("tarefa", text="Tarefa")
     row = 0
     for tarefa in db.get_tarefas_concluidas():
         row = row+1
-        table.insert("", "end", text=row, values=(tarefa[1]))
+        table.insert("", "end", text=row, values=[tarefa[1]])
     scroll_x = ttk.Scrollbar(modal, orient=tk.HORIZONTAL, command=table.xview)
     scroll_y = ttk.Scrollbar(modal, orient=tk.VERTICAL, command=table.yview)
     table.configure(xscrollcommand=scroll_x.set, yscrollcommand=scroll_y.set)
