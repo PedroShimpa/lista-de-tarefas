@@ -36,7 +36,7 @@ def remover_tarefa(id):
 def concluir_tarefa(id):
     concluida_em = datetime.now()
     conn.execute(
-        "update tarefas set concluido = ?, concluida_em = ?", (1, concluida_em, ))
+        "update tarefas set concluido = ?, concluida_em = ? where id = ?", (1, concluida_em, id,  ))
     conn.commit()
 
 
