@@ -1,38 +1,39 @@
 import sqlite3
+db_name = 'database'
 
-conn = sqlite3.connect("assembleia.db")
+conn = sqlite3.connect(db_name+".db")
+
 
 def criar_base():
     conn.cursor()
     conn.execute("""
     create table if not exists tarefas (
-        cd_tarefa integer primary key autoincrement,
+        id integer primary key autoincrement,
         tarefa text,
+        prioridade text,
         concluido integer
     )
     """)
 
-
 def add_tarefa(tarefa):
-    cursor = conn.cursor()
-    cursor.execute(
+    conn.execute(
         "insert into tarefas (tarefa, concluido) values (?, 0)", (tarefa, ))
-    return cursor.lastrowid
-
-
-def remover_tarefa(cd_tarefa):
-    conn.execute("delete from tarefas where cd_tarefa = ?", (cd_tarefa, ))
     conn.commit()
 
+   
 
-def concluir_tarefa(cd_tarefa):
-    conn.execute(
-        "update tarefas set concluido = 1 where cd_tarefa = ?", (cd_tarefa, ))
+def remover_tarefa(id):
+    conn.execute("delete from tarefas where id = ?", (id))
+    conn.commit()
+
+def concluir_tarefa(id):
+    conn.execute("update tarefas set concluido = ?", (1, ))
     conn.commit()
 
 
 def get_tarefas():
-    return conn.execute("select cd_tarefa, tarefa, concluido from tarefas where concluido != 1")
+    return conn.execute("select id, tarefa, concluido from tarefas where concluido != 1")
+
 
 def get_tarefas_concluidas():
-    return conn.execute("select cd_tarefa, tarefa, concluido from tarefas where concluido != 0")
+    return conn.execute("select id, tarefa from tarefas where concluido != 0")
